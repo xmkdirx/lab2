@@ -1,0 +1,47 @@
+#!/bin/bash
+
+#Authors: Cal Halioua, Ali Abdulkarim, Huda Jameel
+#Date Created: October 01, 2020
+#Date Last Modified: 
+
+#SPR500NAA.2207 Lab 2
+#Purpose: Lab 2 Completion Evidence
+
+if [ `id -u` -ne 0 ]
+then
+echo "Please run this script with super user privileges (login as root or put sudo in front of the command)" >&2
+exit 1
+fi
+
+echo ================================================================
+echo
+
+echo ===SELinux Status===
+echo
+sestatus
+echo
+echo ================================================================
+echo
+
+echo ===IP Addresses on all NICs===
+echo
+ip addr
+echo
+echo ================================================================
+echo
+
+echo "===Routing table==="
+echo
+ip route
+echo
+echo ================================================================
+echo
+
+echo ==="iptables rules for the default table (filter table)"===
+echo
+iptables -L -n -v
+echo
+echo ================================================================
+echo
+
+echo End of File
