@@ -1,0 +1,48 @@
+#!/bin/bash
+
+#Author: Raymond Chan
+#Modified by: Cal Halioua
+
+read -p "Please enter your unique subnet number: " MY_NETWORK_NO
+
+if [ -z "$MY_NETWORK_NO" ]
+then
+	echo "When prompted, please enter your unique network number" >&2
+	echo "Or, please run the following command to assign your network number" >&2
+	echo "to the shell varible MY_NETWORK_NO and run this script again." >&2
+	echo "Please replace xx with your actual network number." >&2
+	echo "  export MY_NETWORK_NO=xx" >&2
+	exit 1
+fi
+X=${MY_NETWORK_NO}
+echo "Your Network Number is $X"
+
+echo -n "Press ENTER to continue ... "
+read dummy
+
+# Add new route
+i=0
+
+while [ $i -le 30 ]
+do
+	if [ $i == $X ]
+	then
+		i=$[$i+1]
+	fi
+
+	if [ $i == 31 ]
+	then
+		i=$[$i-1]
+		break
+	fi
+
+	ip route add 192.168.${i}.0/24 via 192.168.${X}.1 dev ens224
+	echo "Adding route to 192.168.$i.0 network via 192.168.${X}.1"
+	i=$[$i+1]
+done
+
+# Delete the default gateway address 172.16.255.1
+ip route del default via 172.16.255.1
+
+# Add route to the 172.16.0.0 network
+ip route add 172.16.0.0/16 via 192.168.${X}.1 dev ens224
